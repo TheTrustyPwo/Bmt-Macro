@@ -150,6 +150,7 @@ def main():
         break
 
     logging.info('Program Stopping...')
+    driver.close()
 
 
 if __name__ == '__main__':
