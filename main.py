@@ -131,7 +131,7 @@ def check_and_book(facility_id: int) -> bool:
     return True
 
 
-if __name__ == '__main__':
+def main():
     execute_time = datetime.strptime(CONFIG['execute'], '%d/%m/%Y %H:%M:%S')
     now = datetime.now()
     delta = execute_time - now
@@ -150,3 +150,7 @@ if __name__ == '__main__':
         break
 
     logging.info('Program Stopping...')
+
+
+if __name__ == '__main__':
+    main()
