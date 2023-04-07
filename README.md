@@ -74,6 +74,8 @@ for all consequences of your actions.
 
 Prerequisites: Cookie Editor browser extension, of if you know how to view browser cookies
 
+### Quick Download
+
 1. Head to <a href="https://github.com/TheTrustyPwo/Bmt-Macro/releases/">Release</a> and download the release zip file
 2. Once complete, extract the zip file
 3. In the extracted folder, you should see 3 files, namely `main.exe`, `config.json` and `cookies.json`
@@ -83,6 +85,24 @@ Prerequisites: Cookie Editor browser extension, of if you know how to view brows
 7. Note that you need to do this every time your cookies change (Which depends on your activity)
 8. Modify `config.json` to your liking. Refer to the section below.
 9. Finally, run main.exe which should open a terminal
+
+### Running From Source
+
+Alternatively, you can clone the repository can run the script from source, which
+could give you more flexibility and also allowing the modification of source code.
+
+On top of cookie editor, python and pip also must be installed on your system.
+
+1. `git clone https://github.com/TheTrustyPwo/Bmt-Macro.git`
+2. `cd Bmt-Macro`
+3. `pip install -r requirements.txt`
+4. Rename `config.json.example` and `cookies.json.example` to `config.json` and `cookies.json` respectively
+5. Go to <a href="https://www.mesrc.net/">mesrc.net</a> and sign in
+6. Using the <a href="https://chrome.google.com/webstore/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm?hl=en">Cookie Editor</a> extension, export your cookies which should copy them to your clipboard
+7. Open `cookies.json` and clear all the text in the file and paste your cookies in
+8. Note that you need to do this every time your cookies change (Which depends on your activity)
+9. Modify `config.json` to your liking. Refer to the section below.
+10. `python main.py`
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
