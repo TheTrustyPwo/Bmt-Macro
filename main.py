@@ -24,6 +24,7 @@ with open('config.json', 'r') as fp:
 
 logging.info(f'Initializing configuration. Please check that all variables are correct.')
 logging.info(f'HEADLESS: {CONFIG["headless"]}')
+logging.info(f'EXECUTION TIME: {CONFIG["execute"]}')
 logging.info(f'DATE: {CONFIG["date"]}')
 logging.info(f'TIME START: {CONFIG["time_start"]}')
 logging.info(f'TIME END: {CONFIG["time_end"]}')
@@ -131,6 +132,8 @@ def check_and_book(facility_id: int) -> bool:
 
 
 if __name__ == '__main__':
+    driver.get('https://www.mesrc.net/')
+
     execute_time = datetime.strptime(CONFIG['execute'], '%d/%m/%Y %H:%M:%S')
     now = datetime.now()
     delta = execute_time - now
