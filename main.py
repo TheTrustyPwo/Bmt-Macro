@@ -132,13 +132,12 @@ def check_and_book(facility_id: int) -> bool:
 
 
 if __name__ == '__main__':
-    driver.get('https://www.mesrc.net/')
-
     execute_time = datetime.strptime(CONFIG['execute'], '%d/%m/%Y %H:%M:%S')
     now = datetime.now()
     delta = execute_time - now
 
     if delta.total_seconds() > 0:
+        driver.get('https://www.mesrc.net/')  # Loads the webpage first to prevent some bugs
         logging.info(f'{delta.total_seconds()} total seconds until execution time. Sleeping program...')
         time.sleep(delta.total_seconds())
 
