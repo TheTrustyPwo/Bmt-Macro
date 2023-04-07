@@ -94,7 +94,7 @@ This is a list of configurable options in the `config.json` file and what they m
 
 | Configurable | Description                                                                                                                                                                                        | Default      | Datatype |
 |--------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|----------|
-| `headless`   | If set to true, the browser will be invisible which increases performance. It is recommended to turn this on for quicker solving, especially when multiple threads are used.                       | false        | bool     |
+| `headless`   | If set to true, the browser will be invisible which will possibly increases performance and reduce unnecessary lag.                                                                                | false        | bool     |
 | `execute`    | The specific date and time to execute the script, i.e. start booking. Usually, you would want to set this to midnight and run the script overnight. It MUST be in the format `DD/MM/YYYY hh:mm:ss` | -            | str      |
 | `date`       | Date which you want to book. It MUST be in the format `DD/MM/YYYY`.                                                                                                                                | -            | str      |
 | `time_start` | The time you want to start playing. It MUST be an integer representing the hour in 24-hour format. (i.e. 7am is 7, 6pm is 18, etc.)                                                                | 10           | int      |
