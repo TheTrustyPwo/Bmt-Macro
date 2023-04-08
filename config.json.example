@@ -1,5 +1,6 @@
 {
   "headless": false,
+  "debug": false,
   "execute": "20/03/2023 11:21:30",
   "date": "13/04/2023",
   "time_start": 10,

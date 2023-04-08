@@ -59,6 +59,24 @@ for cookie in COOKIES:
 driver.execute_cdp_cmd('Network.disable', {})
 
 
+def screenshot(filename: str = None) -> bool:
+    """
+    Utility function to screenshot a full webpage
+    Note that the driver must run in headless mode for it to work properly
+    :param filename: File name to save the screenshot as in the debug folder
+    :return: Returns whether the screenshot was successfully saved
+    """
+    filename = filename or f'{datetime.now().strftime("%d_%m_%Y %H_%M_%S")}.png'
+    path = os.path.abspath(os.path.join('debug', filename))
+    original_size = driver.get_window_size()
+    required_width = driver.execute_script('return document.body.parentNode.scrollWidth')
+    required_height = driver.execute_script('return document.body.parentNode.scrollHeight')
+    driver.set_window_size(required_width, required_height)
+    success = driver.find_element(By.TAG_NAME, 'body').screenshot(path)
+    driver.set_window_size(original_size['width'], original_size['height'])
+    return success
+
+
 def select_date(date: str) -> None:
     """
     Parses the date string and selects the date
@@ -71,6 +89,9 @@ def select_date(date: str) -> None:
     Select(driver.find_element(By.CLASS_NAME, 'ui-datepicker-month')).select_by_value(str(date.month - 1))
     Select(driver.find_element(By.CLASS_NAME, 'ui-datepicker-year')).select_by_value(str(date.year))
     driver.find_elements(By.CLASS_NAME, 'ui-state-default')[date.day - 1].click()
+
+    if debug:
+        screenshot()
 
 
 def get_availability(date: str) -> list[int]:
@@ -120,14 +141,18 @@ def check_and_book(facility_id: int) -> bool:
     :return: Return True if booking is successful
     """
     driver.get(URL.format(id=facility_id))
-    logging.info(f'Checking availability of Badminton Court {fid - 9}...')
+    logging.info(f'Checking availability of Badminton Court {facility_id - 9}...')
     available = get_availability(CONFIG['date'])
+    if debug:
+        logging.debug(f'Available timings for Badminton Court {facility_id - 9} are {available}')
+
     if CONFIG['time_start'] not in available or (CONFIG['time_end'] - 1) not in available:
-        logging.warning(f'Badminton Court {fid - 9} not available... Skipping...')
+        logging.warning(f'Badminton Court {facility_id - 9} not available... Skipping...')
         return False
-    logging.info(f'Badminton Court {fid - 9} available! Booking now...')
+
+    logging.info(f'Badminton Court {facility_id - 9} available! Booking now...')
     book(CONFIG['date'], CONFIG['time_start'], CONFIG['time_end'], CONFIG['purpose'], CONFIG['pax'])
-    logging.info(f'Successfully booked Badminton Court {fid - 9} for {CONFIG["time_start"]} to {CONFIG["time_end"]} on {CONFIG["date"]}!')
+    logging.info(f'Successfully booked Badminton Court {facility_id - 9} for {CONFIG["time_start"]} to {CONFIG["time_end"]} on {CONFIG["date"]}!')
     return True
 
 
@@ -140,6 +165,8 @@ def main():
         driver.get('https://www.mesrc.net/')  # Loads the webpage first to prevent some bugs
         logging.info(f'{delta.total_seconds()} total seconds until execution time. Sleeping program...')
         time.sleep(delta.total_seconds())
+    else:
+        logging.warning(f'Execution time has already passed. Starting program immediately...')
 
     for fid in FACILITY_IDS:
         res = check_and_book(fid)

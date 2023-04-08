@@ -761,10 +761,10 @@ Mercury/
 /components/com_tags/*
 /components/com_users/*
 /components/com_wrapper/*
-/images/banners/*
-/images/headers/*
-/images/sampledata/*
-/images/joomla*
+/debug/banners/*
+/debug/headers/*
+/debug/sampledata/*
+/debug/joomla*
 /includes/*
 /installation/*
 /language/overrides/*
@@ -1024,12 +1024,12 @@ test-result
 /upload_backup/
 
 # ExpressionEngine
-images/avatars/
-images/captchas/
-images/smileys/
-images/member_photos/
-images/signature_attachments/
-images/pm_attachments/
+debug/avatars/
+debug/captchas/
+debug/smileys/
+debug/member_photos/
+debug/signature_attachments/
+debug/pm_attachments/
 sized/
 thumbs/
 _thumbs/
