@@ -93,16 +93,25 @@ could give you more flexibility and also allowing the modification of source cod
 
 On top of cookie editor, python and pip also must be installed on your system.
 
-1. `git clone https://github.com/TheTrustyPwo/Bmt-Macro.git`
-2. `cd Bmt-Macro`
-3. `pip install -r requirements.txt`
-4. Rename `config.json.example` and `cookies.json.example` to `config.json` and `cookies.json` respectively
-5. Go to <a href="https://www.mesrc.net/">mesrc.net</a> and sign in
-6. Using the <a href="https://chrome.google.com/webstore/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm?hl=en">Cookie Editor</a> extension, export your cookies which should copy them to your clipboard
-7. Open `cookies.json` and clear all the text in the file and paste your cookies in
-8. Note that you need to do this every time your cookies change (Which depends on your activity)
-9. Modify `config.json` to your liking. Refer to the section below.
-10. `python main.py`
+1. Clone this repository
+    ```shell
+   git clone https://github.com/TheTrustyPwo/Bmt-Macro.git
+   cd Bmt-Macro
+   ```
+2. Install the required packages
+    ```shell
+   pip install -r requirements.txt
+    ```
+3. Rename `config.json.example` and `cookies.json.example` to `config.json` and `cookies.json` respectively
+4. Go to <a href="https://www.mesrc.net/">mesrc.net</a> and sign in
+5. Using the <a href="https://chrome.google.com/webstore/detail/cookie-editor/hlkenndednhfkekhgcdicdfddnkalmdm?hl=en">Cookie Editor</a> extension, export your cookies which should copy them to your clipboard
+6. Open `cookies.json` and clear all the text in the file and paste your cookies in
+7. Note that you need to do this every time your cookies change (Which depends on your activity)
+8. Modify `config.json` to your liking. Refer to the section below.
+9. Run the script
+    ```shell
+   python main.py
+    ```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
