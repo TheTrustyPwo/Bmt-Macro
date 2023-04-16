@@ -81,6 +81,7 @@ def send_post_request(url, payload):
 
 
 def main():
+    form_token = get_form_token()
     execute_time = datetime.strptime(CONFIG['execute'], '%d/%m/%Y %H:%M:%S')
     delta = execute_time - datetime.now()
 
@@ -92,7 +93,7 @@ def main():
         logging.warning(f'Execution time has already passed. Starting program immediately...')
 
     payload = {
-        'form_token': get_form_token(),
+        'form_token': form_token,
         'form_id': 'efacility_reserve_form',
         'reserve_date': CONFIG['date'].replace('/', '-'),
         'reserve_start_time': CONFIG['time_start'] * 3600,
