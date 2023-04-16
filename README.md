@@ -63,7 +63,7 @@ Some awesome features:
 
 ### Disclaimer
 Use this program at your own risk. This is probably against the terms and conditions of the website.
-This program is merely demonstrating the capabilities of the Selenium webdriver, and you are liable
+This program is merely demonstrating the capabilities of python and http requests, and you are liable
 for all consequences of your actions.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
