@@ -4,6 +4,7 @@ import time
 from datetime import datetime
 
 import requests
+import concurrent.futures
 from bs4 import BeautifulSoup
 
 FACILITY_IDS = (10, 11, 12, 13)  # All badminton facility IDs
@@ -63,6 +64,18 @@ def get_form_token():
     return element.get('value')
 
 
+def send_post_request(url, payload):
+    """
+    Wrapper to send post requests with cookies
+    :param url: URL to post to
+    :param payload: Payload json data
+    :return: HTTP Response
+    """
+    logging.info(f'Sending post request to Court {payload["efacility_id"] - 9}')
+    response = requests.post(url, data=payload, cookies=REQUEST_COOKIES)
+    return response
+
+
 def main():
     execute_time = datetime.strptime(CONFIG['execute'], '%d/%m/%Y %H:%M:%S')
     now = datetime.now()
@@ -86,14 +99,21 @@ def main():
         'efacility_id': None,  # To be set when sending the post request
     }
 
-    for facility_id in FACILITY_IDS:
-        start_time = time.perf_counter()
-        payload['efacility_id'] = facility_id
-        response = requests.post(URL.format(id=facility_id), cookies=REQUEST_COOKIES, data=payload)
-        print(response.status_code)
-        # print(response.headers)
-        end_time = time.perf_counter()
-        logging.info(f'Sending post request to Court {facility_id - 9} took {end_time - start_time} seconds')
+    start_time = time.perf_counter()
+
+    # Create a thread pool executor with 4 threads
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
+        # Submit the POST requests to the executor
+        futures = [executor.submit(send_post_request, URL.format(id=fid), dict(payload, efacility_id=fid)) for fid in FACILITY_IDS]
+
+        # wait for all the futures to complete and get their results
+        results = [f.result() for f in concurrent.futures.as_completed(futures)]
+
+    end_time = time.perf_counter()
+    logging.info(f'Sending all post requests took {end_time - start_time}')
+
+    for f in results:
+        print(f.status_code)
 
 
 if __name__ == '__main__':
