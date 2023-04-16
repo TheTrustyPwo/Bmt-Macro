@@ -1,10 +1,10 @@
+import concurrent.futures
 import json
 import logging
 import time
 from datetime import datetime
 
 import requests
-import concurrent.futures
 from bs4 import BeautifulSoup
 
 FACILITY_IDS = (10, 11, 12, 13)  # All badminton facility IDs
@@ -32,12 +32,14 @@ with open('cookies.json', 'r') as fp:
         cookie["sameSite"] = "None"  # Overrides null value when exported from CookieEditor
         REQUEST_COOKIES[cookie['name']] = cookie['value']  # Setting cookie dict for requests library
 
+
 def timeit(msg: str):
     """
     Utility function to measure the time a function took to run
     :param msg: Formatted message to print
     :return:
     """
+
     def decorator(func):
         def wrapper(*args, **kwargs):
             start_time = time.perf_counter()
@@ -46,7 +48,9 @@ def timeit(msg: str):
             elapsed_time = end_time - start_time
             logging.info(msg.format(time=elapsed_time))
             return result
+
         return wrapper
+
     return decorator
 
 
@@ -78,12 +82,12 @@ def send_post_request(url, payload):
 
 def main():
     execute_time = datetime.strptime(CONFIG['execute'], '%d/%m/%Y %H:%M:%S')
-    now = datetime.now()
-    delta = execute_time - now
+    delta = execute_time - datetime.now()
 
     if delta.total_seconds() > 0:
         logging.info(f'{delta.total_seconds()} total seconds until execution time. Sleeping program...')
         time.sleep(delta.total_seconds())
+        logging.info('Program starting...')
     else:
         logging.warning(f'Execution time has already passed. Starting program immediately...')
 
@@ -104,7 +108,8 @@ def main():
     # Create a thread pool executor with 4 threads
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         # Submit the POST requests to the executor
-        futures = [executor.submit(send_post_request, URL.format(id=fid), dict(payload, efacility_id=fid)) for fid in FACILITY_IDS]
+        futures = [executor.submit(send_post_request, URL.format(id=fid), dict(payload, efacility_id=fid)) for fid in
+                   FACILITY_IDS]
 
         # wait for all the futures to complete and get their results
         results = [f.result() for f in concurrent.futures.as_completed(futures)]
