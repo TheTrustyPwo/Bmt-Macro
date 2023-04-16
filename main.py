@@ -8,9 +8,9 @@ from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
+URL = 'https://www.mesrc.net/efacility/{id}/reserve'
 FACILITY_IDS = [10, 11, 12, 13]  # All badminton facility IDs
 random.shuffle(FACILITY_IDS)  # Shuffle IDs because why not
-URL = 'https://www.mesrc.net/efacility/{id}/reserve'
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
 
@@ -26,13 +26,15 @@ logging.info(f'TIME END: {CONFIG["time_end"]}')
 logging.info(f'PURPOSE: {CONFIG["purpose"]}')
 logging.info(f'PAX: {CONFIG["pax"]}')
 
+# Create new requests session to improve performance
+SESSION = requests.Session()
+
 # Load cookie file
-REQUEST_COOKIES = {}
 with open('cookies.json', 'r') as fp:
     COOKIES = json.load(fp)
     for cookie in COOKIES:
-        cookie["sameSite"] = "None"  # Overrides null value when exported from CookieEditor
-        REQUEST_COOKIES[cookie['name']] = cookie['value']  # Setting cookie dict for requests library
+        # Setting cookie for requests session
+        SESSION.cookies.set(cookie['name'], cookie['value'], domain=cookie['domain'])
 
 
 def timeit(msg: str):
@@ -60,8 +62,8 @@ def get_form_token():
     It is a constant that changes each session (I think)
     :return:
     """
-    content = requests.get(URL.format(id=10), cookies=REQUEST_COOKIES).content
-    soup = BeautifulSoup(content, 'html.parser')
+    response = SESSION.get(URL.format(id=10))
+    soup = BeautifulSoup(response.content, 'html.parser')
     element = soup.find('input', {'data-drupal-selector': 'edit-efacility-reserve-form-form-token'})
     return element.get('value')
 
@@ -74,7 +76,7 @@ def send_post_request(url, payload):
     :return: HTTP Response
     """
     logging.info(f'Sending post request to Court {payload["efacility_id"] - 9}')
-    response = requests.post(url, data=payload, cookies=REQUEST_COOKIES)
+    response = SESSION.post(url, data=payload)
     return response
 
 
