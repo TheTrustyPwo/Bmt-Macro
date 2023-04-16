@@ -2,12 +2,14 @@ import concurrent.futures
 import json
 import logging
 import time
+import random
 from datetime import datetime
 
 import requests
 from bs4 import BeautifulSoup
 
-FACILITY_IDS = (10, 11, 12, 13)  # All badminton facility IDs
+FACILITY_IDS = [10, 11, 12, 13]  # All badminton facility IDs
+random.shuffle(FACILITY_IDS)  # Shuffle IDs because why not
 URL = 'https://www.mesrc.net/efacility/{id}/reserve'
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(message)s')
