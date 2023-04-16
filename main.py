@@ -115,6 +115,9 @@ def main():
     for f in results:
         print(f.status_code)
 
+    logging.info(f'Visit https://www.mesrc.net/user/0/efacility to check if the court has been booked')
+    logging.info('Program Stopping...')
+
 
 if __name__ == '__main__':
     main()
