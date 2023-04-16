@@ -1,8 +1,8 @@
 import concurrent.futures
 import json
 import logging
-import time
 import random
+import time
 from datetime import datetime
 
 import requests
@@ -107,8 +107,7 @@ def main():
     # Create a thread pool executor with 4 threads
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         # Submit the POST requests to the executor
-        futures = [executor.submit(send_post_request, URL.format(id=fid), dict(payload, efacility_id=fid)) for fid in
-                   FACILITY_IDS]
+        futures = [executor.submit(send_post_request, URL.format(id=fid), dict(payload, efacility_id=fid)) for fid in FACILITY_IDS]
 
         # wait for all the futures to complete and get their results
         results = [f.result() for f in concurrent.futures.as_completed(futures)]
@@ -116,8 +115,8 @@ def main():
     end_time = time.perf_counter()
     logging.info(f'Sending all post requests took {end_time - start_time}')
 
-    for f in results:
-        print(f.status_code)
+    for fid, res in zip(FACILITY_IDS, results):
+        logging.info(f'Court {fid - 9} response: {res.status_code}')
 
     logging.info(f'Visit https://www.mesrc.net/user/0/efacility to check if the court has been booked')
     logging.info('Program Stopping...')
