@@ -39,7 +39,6 @@ def timeit(msg: str):
     :param msg: Formatted message to print
     :return:
     """
-
     def decorator(func):
         def wrapper(*args, **kwargs):
             start_time = time.perf_counter()
@@ -48,9 +47,7 @@ def timeit(msg: str):
             elapsed_time = end_time - start_time
             logging.info(msg.format(time=elapsed_time))
             return result
-
         return wrapper
-
     return decorator
 
 
@@ -61,7 +58,6 @@ def get_form_token():
     It is a constant that changes each session (I think)
     :return:
     """
-
     content = requests.get(URL.format(id=10), cookies=REQUEST_COOKIES).content
     soup = BeautifulSoup(content, 'html.parser')
     element = soup.find('input', {'data-drupal-selector': 'edit-efacility-reserve-form-form-token'})
@@ -85,7 +81,7 @@ def main():
     execute_time = datetime.strptime(CONFIG['execute'], '%d/%m/%Y %H:%M:%S')
     delta = execute_time - datetime.now()
 
-    if delta.total_seconds() > 0:
+    if delta.total_seconds() > 0:  # Not yet execution time so sleep program
         logging.info(f'{delta.total_seconds()} total seconds until execution time. Sleeping program...')
         time.sleep(delta.total_seconds())
         logging.info('Program starting...')
