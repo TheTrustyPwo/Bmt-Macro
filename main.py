@@ -75,9 +75,31 @@ def send_post_request(url, payload):
     :param payload: Payload json data
     :return: HTTP Response
     """
-    logging.info(f'Sending post request to Court {payload["efacility_id"] - 9}')
-    response = SESSION.post(url, data=payload)
-    return response
+    court = payload['efacility_id'] - 9
+    retry_count = 0
+    logging.info(f'Sending post request to Court {court}')
+    while retry_count < 5:
+        try:
+            response = SESSION.post(url, data=payload, timeout=3)
+            if response.status_code == 200:
+                logging.info(f'Court {court} returned 200')
+                return response
+            elif response.status_code == 502:
+                # If the server returns a 502 error, retry the request after a short delay
+                logging.error(f'Court {court} returned 502. Retrying...')
+                time.sleep(1)
+                retry_count += 1
+            else:
+                # Handle other errors here
+                logging.error(f'Court {court} returned {response.status_code}. Retrying...')
+                retry_count += 1
+        except Exception as e:
+            # Handle exceptions here
+            logging.error(f'Court {court} returned Exception {e}. Retrying...')
+            retry_count += 1
+
+    # If the request fails after the maximum number of retries, log the error
+    logging.error(f'Court {court} exceeded maximum number of retries')
 
 
 def main():
@@ -116,9 +138,6 @@ def main():
 
     end_time = time.perf_counter()
     logging.info(f'Sending all post requests took {end_time - start_time}')
-
-    for fid, res in zip(FACILITY_IDS, results):
-        logging.info(f'Court {fid - 9} response: {res.status_code}')
 
     logging.info(f'Visit https://www.mesrc.net/user/0/efacility to check if the court has been booked')
     logging.info('Program Stopping...')
